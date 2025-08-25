@@ -72,7 +72,7 @@ runs:
       run: |
         VERSION="${{ steps.chart_version.outputs.version }}"
         CHART_NAME="${{ steps.chart_version.outputs.chart_name }}"
-        OCI_URL="${{ inputs.registry }}/${{ inputs.oci_prefix }}"
+        OCI_URL="${{ inputs.registry }}/${{ inputs.prefix }}"
 
         # Create charts directory
         mkdir -p charts
