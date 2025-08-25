@@ -1,0 +1,42 @@
+name: Release Composite action
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
+    - name: Check if tag exists and fail if it does
+      run: |
+        VERSION="${{ inputs.version }}"
+        if git rev-parse "$VERSION" >/dev/null 2>&1; then
+          echo "❌ Error: Tag $VERSION already exists!"
+          echo "Please use a different version number."
+          exit 1
+        else
+          echo "✅ Tag $VERSION does not exist, proceeding with release"
+        fi
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2.3.2
+      with:
+        tag_name: ${{ input.version }}
+        name: Release ${{ input.version }}
+        generate_release_notes: true
+        make_latest: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
