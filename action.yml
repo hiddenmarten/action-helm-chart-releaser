@@ -15,7 +15,7 @@ inputs:
   prefix:
     description: 'Oci registry prefix to release chart under'
     required: false
-    default: '${{ inputs.repository_owner }}/charts'
+    default: '${{ github.repository_owner }}/charts'
 
   username:
     description: 'Username for OCI repository access'
@@ -24,13 +24,11 @@ inputs:
 
   password:
     description: 'Password for OCI repository access'
-    required: false
-    default: ${{ secrets.GITHUB_TOKEN }}
+    required: true
 
   github_token:
     description: 'Github token to create release'
-    required: false
-    default: ${{ secrets.GITHUB_TOKEN }}
+    required: true
 
 runs:
   using: 'composite'
